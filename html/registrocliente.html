@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro de Cliente</title>
+</head>
+<body>
+    <h1>Registro de Cliente</h1>
+    <form action="php/crud_clientes.php" method="post">
+        <input type="hidden" name="action" value="create">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre"><br>
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido"><br>
+        <label for="direccion">Dirección:</label><br>
+        <input type="text" id="direccion" name="direccion"><br>
+        <label for="ciudad">Ciudad:</label><br>
+        <input type="text" id="ciudad" name="ciudad"><br>
+        <label for="telefono">Teléfono:</label><br>
+        <input type="text" id="telefono" name="telefono"><br>
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="text" id="correo" name="correo"><br>
+        <input type="submit" value="Registrar">
+    </form>
+</body>
+</html>
