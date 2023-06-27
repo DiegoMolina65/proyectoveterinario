@@ -1,6 +1,12 @@
 <?php
 
 // Los detalles de la base de datos se definen como constantes
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'veterinario_web');
+define('DB_USER', 'phpmyadmin');
+define('DB_PASSWORD', 'admin');
+define('DB_CHARSET', 'utf8mb4');
+
 class Database
 {
     private $host;
@@ -11,14 +17,14 @@ class Database
     
     public function __construct()
     {
-        $this->host = constant('localhost');
-        $this->db = constant('veterinario_web');
-        $this->user = constant('phpmyadmin');
-        $this->password = constant('admin');
-        $this->charset = constant('CHARSET');
+        $this->host = DB_HOST;
+        $this->db = DB_NAME;
+        $this->user = DB_USER;
+        $this->password = DB_PASSWORD;
+        $this->charset = DB_CHARSET;
     }
 
-    function connect()
+    public function connect()
     {
         try {
             $connection = "mysql:host=" . $this->host . ";dbname=" . $this->db . ";charset=" . $this->charset;
@@ -37,5 +43,11 @@ class Database
         }
     }
 }
-?>
 
+// Crear una instancia de la clase Database
+$db = new Database();
+// Establecer conexión con la base de datos
+$conn = $db->connect();
+
+// Asegúrate de que el objeto de conexión esté disponible en otros archivos
+// Puedes usar $conn en otros archivos incluyendo este archivo
