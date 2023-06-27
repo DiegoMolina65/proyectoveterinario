@@ -2,25 +2,28 @@
 require_once "db_config.php";
 
 $nombre_usuario = $_POST["nombre_usuario"];
-$correo_electronico = $_POST["correo_electronico"];
 $contraseña = $_POST["contraseña"];
+$correo = $_POST["correo"];
+$rol = $_POST["rol"];
 
-// Verificación de datos vacíos
-if (empty($nombre_usuario) || empty($correo_electronico) || empty($contraseña)) {
+if (empty($nombre_usuario) || empty($contraseña) || empty($correo)) {
   echo "Por favor, complete todos los campos.";
   exit();
 }
 
-$contraseña_cifrada = password_hash($contraseña, PASSWORD_DEFAULT);
+$contraseña_hash = password_hash($contraseña, PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO Usuarios (Nombre_Usuario, Correo_electrónico, Contraseña)
-VALUES ('$nombre_usuario', '$correo_electronico', '$contraseña_cifrada')";
+$sql = "INSERT INTO Usuarios (Nombre_Usuario, Contraseña, Correo_electronico, Rol) VALUES (?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("sssi", $nombre_usuario, $contraseña_hash, $correo, $rol);
 
-if ($conn->query($sql) === TRUE) {
-  echo "Registro exitoso. Ahora puedes iniciar sesión.";
+if ($stmt->execute()) {
+  header("Location: ../html/login.html"); // redirige a la página de inicio de sesión después del registro exitoso
+  exit();
 } else {
-  echo "Error: " . $sql . "<br>" . $conn->error;
+  echo "Error al registrar usuario: " . $conn->error;
 }
 
+$stmt->close();
 $conn->close();
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once "db_config.php";
+require_once 'db_config.php';
 
 $nombre_usuario = $_POST["nombre_usuario"];
 $contraseña = $_POST["contraseña"];
@@ -16,7 +16,8 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
   $row = $result->fetch_assoc();
   if (password_verify($contraseña, $row["Contraseña"])) {
-    echo "Inicio de sesión exitoso.";
+    header("Location: ../html/info.html");
+    exit();
   } else {
     echo "Contraseña incorrecta.";
   }
