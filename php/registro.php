@@ -1,6 +1,8 @@
 <?php
 require_once "db_config.php";
 
+if ($conn->connect_error) die("Conexión fallida: " . $conn->connect_error);
+
 $nombre_usuario = $_POST["nombre_usuario"];
 $contraseña = $_POST["contraseña"];
 $correo = $_POST["correo"];
@@ -15,7 +17,7 @@ $contraseña_hash = password_hash($contraseña, PASSWORD_DEFAULT);
 
 $sql = "INSERT INTO Usuarios (Nombre_Usuario, Contraseña, Correo_electronico, Rol) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssi", $nombre_usuario, $contraseña_hash, $correo, $rol);
+$stmt->bind_param("ssss", $nombre_usuario, $contraseña_hash, $correo, $rol); // 'i' se cambió a 's' para $rol
 
 if ($stmt->execute()) {
   header("Location: ../html/login.html"); // redirige a la página de inicio de sesión después del registro exitoso
