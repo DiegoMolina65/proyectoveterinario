@@ -72,7 +72,7 @@ if ($action == "create") {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_mascota);
     if($stmt->execute()){
-        header("Location: registromascota.php");
+        header("Location: ../html/registromascota.php");
         exit();
     } else {
         echo "Error al eliminar mascota: " . $stmt->error;
@@ -81,6 +81,5 @@ if ($action == "create") {
     echo "Acción no válida.";
 }
 
-$stmt->close();
 $conn->close();
 ?>
