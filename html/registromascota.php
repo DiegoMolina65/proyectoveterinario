@@ -12,7 +12,7 @@
         $mascotas = $_SESSION['mascotas'] ?? [];
     ?>
 
-    <form action="../php/crud_mascotas.php" method="post">
+    <form action="../php/crud_mascota.php" method="post">
         <input type="hidden" name="action" value="create">
         <label for="id_cliente">ID Cliente:</label><br>
         <input type="text" id="id_cliente" name="id_cliente"><br>
@@ -59,7 +59,7 @@
             <td><?php echo $mascota["Color"]; ?></td>
             <td><?php echo $mascota["Historial_Medico"]; ?></td>
             <td>
-                <form action="../php/crud_mascotas.php" method="post">
+                <form action="../php/crud_mascota.php" method="post">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
                     <input type="text" name="id_cliente" value="<?php echo $mascota["ID_Cliente"]; ?>">
@@ -72,7 +72,7 @@
                     <textarea name="historial_medico"><?php echo $mascota["Historial_Medico"]; ?></textarea>
                     <input type="submit" value="Actualizar">
                 </form>
-                <form action="../php/crud_mascotas.php" method="post">
+                <form action="../php/crud_mascota.php" method="post">
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
                     <input type="submit" value="Eliminar">
