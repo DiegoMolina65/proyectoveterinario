@@ -20,7 +20,7 @@ if ($action == "create") {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("isssssss", $id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico);
     if($stmt->execute()){
-        header("Location: registromascota.php");
+        header("Location: ../html/registromascota.php");
         exit();
     } else {
         echo "Error al registrar mascota: " . $stmt->error;
@@ -60,7 +60,7 @@ if ($action == "create") {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssssssi", $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota);
     if($stmt->execute()){
-        header("Location: registromascota.php");
+        header("Location: ../html/registromascota.php");
         exit();
     } else {
         echo "Error al actualizar mascota: " . $stmt->error;
