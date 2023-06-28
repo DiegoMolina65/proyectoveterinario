@@ -22,5 +22,33 @@
         <input type="text" id="correo" name="correo"><br>
         <input type="submit" value="Registrar">
     </form>
+    
+    <h2>Lista de Clientes</h2>
+    <?php
+        session_start();
+        $clientes = $_SESSION['clientes'] ?? [];
+    ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Dirección</th>
+            <th>Ciudad</th>
+            <th>Teléfono</th>
+            <th>Correo Electrónico</th>
+        </tr>
+        <?php foreach($clientes as $cliente): ?>
+        <tr>
+            <td><?php echo $cliente["ID_Cliente"]; ?></td>
+            <td><?php echo $cliente["Nombre"]; ?></td>
+            <td><?php echo $cliente["Apellido"]; ?></td>
+            <td><?php echo $cliente["Dirección"]; ?></td>
+            <td><?php echo $cliente["Ciudad"]; ?></td>
+            <td><?php echo $cliente["Teléfono"]; ?></td>
+            <td><?php echo $cliente["Correo_electrónico"]; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 </body>
 </html>
