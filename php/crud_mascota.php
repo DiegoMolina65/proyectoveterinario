@@ -33,7 +33,7 @@ if ($action == "create") {
     }
 } else if ($action == "update") {
     $id_mascota = $_POST["id_mascota"];
-    checkEmptyFields(["id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color", "historial_medico", "id_mascota"]);
+    checkEmptyFields(["id_mascota", "id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color", "historial_medico"]);
     
     $sql = "UPDATE Mascotas SET ID_Cliente=?, Nombre=?, Especie=?, Raza=?, Fecha_Nacimiento=?, Peso=?, Color=?, Historial_Medico=? WHERE ID_Mascota=?";
     $stmt = $conn->prepare($sql);
@@ -55,9 +55,7 @@ if ($action == "create") {
     } else {
         echo "Error al eliminar mascota: " . $stmt->errorInfo()[2];
     }
-}
-
-if ($action == "search") {
+} else if ($action == "search") {
     $id_cliente = $_GET["id_cliente"];
     
     $sql = "SELECT * FROM Mascotas WHERE ID_Cliente = ?";
@@ -72,11 +70,9 @@ if ($action == "search") {
     exit();
 }
 
-
 $stmt = null;
 $conn = null;
 
-// Crear una lista de mascotas.
 try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $db_username, $db_password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -85,7 +81,7 @@ try {
     $stmt = $conn->query($sql);
     $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Guardar la lista de mascotas en una variable de sesión para su uso en registrocliente.php.
+    // Guardar la lista de mascotas en una variable de sesión para su uso en registro_mascotas.php.
     session_start();
     $_SESSION['mascotas'] = $mascotas;
 } catch(PDOException $e) {
