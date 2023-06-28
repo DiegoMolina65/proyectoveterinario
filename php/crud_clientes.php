@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once "db_config.php";
 
 function checkEmptyFields($fields) {
@@ -26,11 +23,11 @@ if ($action == "create") {
     
     $sql = "INSERT INTO Clientes (Nombre, Apellido, Dirección, Ciudad, Teléfono, Correo_electrónico) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssss", $nombre, $apellido, $direccion, $ciudad, $telefono, $correo);
-    if($stmt->execute()){
+    $stmt->execute([$nombre, $apellido, $direccion, $ciudad, $telefono, $correo]);
+    if($stmt->rowCount() > 0){
         echo "Cliente añadido con éxito.";
     } else {
-        echo "Error al añadir cliente: " . $conn->error;
+        echo "Error al añadir cliente: " . $stmt->errorInfo()[2];
     }
 } else if ($action == "update") {
     $id_cliente = $_POST["id_cliente"];
@@ -38,11 +35,11 @@ if ($action == "create") {
     
     $sql = "UPDATE Clientes SET Nombre=?, Apellido=?, Dirección=?, Ciudad=?, Teléfono=?, Correo_electrónico=? WHERE ID_Cliente=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssi", $nombre, $apellido, $direccion, $ciudad, $telefono, $correo, $id_cliente);
-    if($stmt->execute()){
+    $stmt->execute([$nombre, $apellido, $direccion, $ciudad, $telefono, $correo, $id_cliente]);
+    if($stmt->rowCount() > 0){
         echo "Cliente actualizado con éxito.";
     } else {
-        echo "Error al actualizar cliente: " . $conn->error;
+        echo "Error al actualizar cliente: " . $stmt->errorInfo()[2];
     }
 } else if ($action == "delete") {
     $id_cliente = $_POST["id_cliente"];
@@ -50,28 +47,31 @@ if ($action == "create") {
     
     $sql = "DELETE FROM Clientes WHERE ID_Cliente=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_cliente);
-    if($stmt->execute()){
+    $stmt->execute([$id_cliente]);
+    if($stmt->rowCount() > 0){
         echo "Cliente eliminado con éxito.";
     } else {
-        echo "Error al eliminar cliente: " . $conn->error;
+        echo "Error al eliminar cliente: " . $stmt->errorInfo()[2];
     }
 }
 
-$stmt->close();
-$conn->close();
+$stmt = null;
+$conn = null;
 
 // Crear una lista de clientes.
-$sql = "SELECT * FROM Clientes";
-$result = $conn->query($sql);
-$clientes = [];
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $clientes[] = $row;
-    }
+try {
+    $conn = new PDO("mysql:host=$host;dbname=$db_name", $db_username, $db_password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $sql = "SELECT * FROM Clientes";
+    $stmt = $conn->query($sql);
+    $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Guardar la lista de clientes en una variable de sesión para su uso en registrocliente.php.
+    session_start();
+    $_SESSION['clientes'] = $clientes;
+} catch(PDOException $e) {
+    echo "Error al recuperar la lista de clientes: " . $e->getMessage();
 }
 
-// Guardar la lista de clientes en una variable de sesión para su uso en registrocliente.html.
-session_start();
-$_SESSION['clientes'] = $clientes;
 ?>
