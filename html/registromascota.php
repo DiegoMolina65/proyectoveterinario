@@ -9,6 +9,7 @@
     <h1>Registro de Mascotas</h1>
     <?php
         session_start();
+        $cliente = $_SESSION['cliente'] ?? null;
         $mascotas = $_SESSION['mascotas'] ?? [];
     ?>
 
@@ -20,6 +21,31 @@
         <input type="submit" value="Buscar">
     </form>
 
+    <h2>Datos del Cliente</h2>
+<?php if ($cliente): ?>
+    <p>ID: <?php echo $cliente["ID_Cliente"]; ?></p>
+    <p>Nombre: <?php echo $cliente["Nombre"]; ?></p>
+    <p>Apellido: <?php echo $cliente["Apellido"]; ?></p>
+    <p>Dirección: <?php echo $cliente["Dirección"]; ?></p>
+    <p>Ciudad: <?php echo $cliente["Ciudad"]; ?></p>
+    <p>Teléfono: <?php echo $cliente["Teléfono"]; ?></p>
+    <p>Correo Electrónico: <?php echo $cliente["Correo_electrónico"]; ?></p>
+<?php else: ?>
+    <p>No se encontró un cliente con el ID proporcionado.</p>
+<?php endif; ?>
+
+<h2>Mascotas del Cliente</h2>
+<?php if (count($mascotas) > 0): ?>
+    <ul>
+        <?php foreach($mascotas as $mascota): ?>
+            <li>
+                <?php echo $mascota["Nombre"] . " (" . $mascota["Especie"] . ", " . $mascota["Raza"] . ")"; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>No se encontraron mascotas para este cliente.</p>
+<?php endif; ?>
 
     <h2>Registro mascota</h2>
     <form action="../php/crud_mascota.php" method="post">
