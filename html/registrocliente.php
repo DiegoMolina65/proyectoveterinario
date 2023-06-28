@@ -3,6 +3,7 @@
 <head>
     <title>Registro de Cliente</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/stylescrudcliente.css">
 </head>
 <body>
     <h1>Registro de Cliente</h1>
