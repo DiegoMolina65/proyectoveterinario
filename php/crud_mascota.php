@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once "db_config.php";
 
 $action = $_POST["action"];
@@ -18,20 +15,22 @@ if ($action == "create") {
 
     $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico]);
-    if($stmt->rowCount() > 0){
-        header("Location: ../html/registromascota.php");
-        exit();
+    $stmt->bind_param("isssssss", $id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico);
+    
+    if ($stmt->execute()) {
+        echo "La mascota se registró exitosamente.";
     } else {
-        echo "Error al registrar mascota: " . $stmt->errorInfo()[2];
+        echo "Error al registrar la mascota: " . $stmt->error;
     }
 } elseif ($action == "get_owner") {
     $id_cliente_dueno = $_POST["id_cliente_dueno"];
 
     $sql = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->execute([$id_cliente_dueno]);
-    $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->bind_param("i", $id_cliente_dueno);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $cliente = $result->fetch_assoc();
     
     if ($cliente) {
         echo "<h3>Datos del Dueño</h3>";
