@@ -16,7 +16,7 @@ if ($action == "create") {
     $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("isssssss", $id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico);
-    
+
     if ($stmt->execute()) {
         echo "La mascota se registró exitosamente.";
     } else {
@@ -31,7 +31,7 @@ if ($action == "create") {
     $stmt->execute();
     $result = $stmt->get_result();
     $cliente = $result->fetch_assoc();
-    
+
     if ($cliente) {
         echo "<h3>Datos del Dueño</h3>";
         echo "<p>Nombre: " . $cliente['Nombre'] . "</p>";
