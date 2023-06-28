@@ -43,40 +43,58 @@ if ($action == "create") {
     } else {
         echo "No se encontró un cliente con ese ID.";
     }
-} elseif ($action == "update") {
-    $id_mascota = $_POST["id_mascota"];
-    $nombre = $_POST["nombre"];
-    $especie = $_POST["especie"];
-    $raza = $_POST["raza"];
-    $fecha_nacimiento = $_POST["fecha_nacimiento"];
-    $peso = $_POST["peso"];
-    $color = $_POST["color"];
-    $historial_medico = $_POST["historial_medico"];
-
-    $sql = "UPDATE Mascotas SET Nombre=?, Especie=?, Raza=?, Fecha_Nacimiento=?, Peso=?, Color=?, Historial_Medico=? WHERE ID_Mascota=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota]);
-    if($stmt->rowCount() > 0){
-        header("Location: ../html/registromascota.php");
-        exit();
-    } else {
-        echo "Error al actualizar mascota: " . $stmt->errorInfo()[2];
-    }
-} elseif ($action == "delete") {
-    $id_mascota = $_POST["id_mascota"];
-
-    $sql = "DELETE FROM Mascotas WHERE ID_Mascota = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$id_mascota]);
-    if($stmt->rowCount() > 0){
-        header("Location: ../html/registromascota.php");
-        exit();
-    } else {
-        echo "Error al eliminar mascota: " . $stmt->errorInfo()[2];
-    }
 } else {
-    echo "Acción no válida.";
+    $sql = "SELECT * FROM Mascotas";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        echo "<h2>Tabla de Mascotas Registradas</h2>";
+        echo "<table>";
+        echo "<tr>";
+        echo "<th>ID Mascota</th>";
+        echo "<th>ID Cliente</th>";
+        echo "<th>Nombre</th>";
+        echo "<th>Especie</th>";
+        echo "<th>Raza</th>";
+        echo "<th>Fecha de Nacimiento</th>";
+        echo "<th>Peso</th>";
+        echo "<th>Color</th>";
+        echo "<th>Historial Médico</th>";
+        echo "<th>Acciones</th>";
+        echo "</tr>";
+
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>".$row['ID_Mascota']."</td>";
+            echo "<td>".$row['ID_Cliente']."</td>";
+            echo "<td>".$row['Nombre']."</td>";
+            echo "<td>".$row['Especie']."</td>";
+            echo "<td>".$row['Raza']."</td>";
+            echo "<td>".$row['Fecha_Nacimiento']."</td>";
+            echo "<td>".$row['Peso']."</td>";
+            echo "<td>".$row['Color']."</td>";
+            echo "<td>".$row['Historial_Medico']."</td>";
+            echo "<td>";
+            echo "<form action='../php/crud_mascota.php' method='post'>";
+            echo "<input type='hidden' name='action' value='delete'>";
+            echo "<input type='hidden' name='id_mascota' value='".$row['ID_Mascota']."'>";
+            echo "<button type='submit'>Eliminar</button>";
+            echo "</form>";
+            echo "<form action='../php/crud_mascota.php' method='post'>";
+            echo "<input type='hidden' name='action' value='update'>";
+            echo "<input type='hidden' name='id_mascota' value='".$row['ID_Mascota']."'>";
+            echo "<button type='submit'>Actualizar</button>";
+            echo "</form>";
+            echo "</td>";
+            echo "</tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "No se encontraron mascotas registradas.";
+    }
 }
 
-$conn = null;
+$stmt->close();
+$conn->close();
 ?>
