@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         
         if ($conn->query($sql) === TRUE) {
             // Redireccionar a la página actual para actualizar la tabla de mascotas registradas
-            header('Location: ' . $_SERVER['PHP_SELF']);
+            header('Location: crud_mascota.php' . $_SERVER['PHP_SELF']);
             exit();
         } else {
             echo 'Error al insertar los datos: ' . $conn->error;
