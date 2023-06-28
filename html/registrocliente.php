@@ -12,8 +12,6 @@
         $clientes = $_SESSION['clientes'] ?? [];
     ?>
 
-    
-    <h2>Registrar Cliente</h2>
     <form action="../php/crud_clientes.php" method="post">
         <input type="hidden" name="action" value="create">
         <label for="nombre">Nombre:</label><br>
