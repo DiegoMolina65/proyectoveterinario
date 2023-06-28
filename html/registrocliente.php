@@ -37,6 +37,7 @@
             <th>Ciudad</th>
             <th>Teléfono</th>
             <th>Correo Electrónico</th>
+            <th>Acciones</th>
         </tr>
         <?php foreach($clientes as $cliente): ?>
         <tr>
@@ -47,8 +48,27 @@
             <td><?php echo $cliente["Ciudad"]; ?></td>
             <td><?php echo $cliente["Teléfono"]; ?></td>
             <td><?php echo $cliente["Correo_electrónico"]; ?></td>
+            <td>
+                <form action="../php/crud_clientes.php" method="post">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="id_cliente" value="<?php echo $cliente["ID_Cliente"]; ?>">
+                    <input type="submit" value="Actualizar">
+                </form>
+                <form action="../php/crud_clientes.php" method="post">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="id_cliente" value="<?php echo $cliente["ID_Cliente"]; ?>">
+                    <input type="submit" value="Eliminar">
+                </form>
+            </td>
         </tr>
         <?php endforeach; ?>
     </table>
+    
+    <script>
+        // Actualizar la página después de enviar el formulario de registro
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
 </body>
 </html>
