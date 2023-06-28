@@ -1,25 +1,9 @@
-<?php
-require_once "db_config.php";
-
-// Obtener mascotas registradas
-$sql = "SELECT * FROM Mascotas";
-$result = $conn->query($sql);
-$mascotas = [];
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $mascotas[] = $row;
-    }
-}
-
-$conn->close();
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Registro de Mascota</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../css/stylecrudmascota.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <h1>Registro de Mascota</h1>
