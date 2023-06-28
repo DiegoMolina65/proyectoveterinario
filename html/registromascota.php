@@ -8,7 +8,7 @@
 <body>
     <h1>Registro de Mascota</h1>
     <h2>Registrar Mascota</h2>
-    <form action="crud_mascota.php" method="post">
+    <form action="../php/crud_mascota.php" method="post">
         <input type="hidden" name="action" value="create">
         <label for="id_cliente">ID del Cliente:</label><br>
         <input type="text" id="id_cliente" name="id_cliente"><br>
@@ -30,7 +30,7 @@
     </form>
 
     <h2>Datos del Dueño</h2>
-    <form action="crud_mascota.php" method="post">
+    <form action="../php/crud_mascota.php" method="post">
         <input type="hidden" name="action" value="get_owner">
         <label for="id_cliente_dueno">ID del Cliente:</label><br>
         <input type="text" id="id_cliente_dueno" name="id_cliente_dueno"><br>
@@ -63,12 +63,12 @@
             <td><?php echo $mascota["Color"]; ?></td>
             <td><?php echo $mascota["Historial_Medico"]; ?></td>
             <td>
-                <form action="crud_mascota.php" method="post">
+                <form action="../php/crud_mascota.php" method="post">
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
                     <button type="submit">Eliminar</button>
                 </form>
-                <form action="crud_mascota.php" method="post">
+                <form action="../php/crud_mascota.php" method="post">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
                     <button type="submit">Actualizar</button>
