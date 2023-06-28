@@ -20,6 +20,7 @@
             <input type="submit" value="Buscar">
         </form>
 
+    <h2>Registro mascota</h2>
     <form action="../php/crud_mascota.php" method="post">
         <input type="hidden" name="action" value="create">
         <label for="id_cliente">ID Cliente:</label><br>

@@ -56,27 +56,33 @@ if ($action == "create") {
         echo "Error al eliminar mascota: " . $stmt->errorInfo()[2];
     }
 }   else if ($action == "search") {
-        $id_cliente = $_GET["id_cliente"];
-        
-        // Recupera la información del cliente
-        $sql_cliente = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
-        $stmt_cliente = $conn->prepare($sql_cliente);
-        $stmt_cliente->execute([$id_cliente]);
-        $cliente = $stmt_cliente->fetch(PDO::FETCH_ASSOC);
-        
+    $id_cliente = $_GET["id_cliente"];
+    
+    // Recupera la información del cliente
+    $sql_cliente = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
+    $stmt_cliente = $conn->prepare($sql_cliente);
+    $stmt_cliente->execute([$id_cliente]);
+    $cliente = $stmt_cliente->fetch(PDO::FETCH_ASSOC);
+    
+    if ($cliente) {
         // Recupera las mascotas de este cliente
         $sql_mascotas = "SELECT * FROM Mascotas WHERE ID_Cliente = ?";
         $stmt_mascotas = $conn->prepare($sql_mascotas);
         $stmt_mascotas->execute([$id_cliente]);
         $mascotas = $stmt_mascotas->fetchAll(PDO::FETCH_ASSOC);
-        
+    
         // Guarda el cliente y sus mascotas en variables de sesión para su uso en la página de registro de mascotas
         session_start();
         $_SESSION['cliente'] = $cliente;
         $_SESSION['mascotas'] = $mascotas;
-        header('Location: ../html/registrocliente.php');
-        exit();
+    } else {
+        echo "No se encontró un cliente con el ID proporcionado.";
     }
+    
+    header('Location: ../html/registromascota.php');
+    exit();
+}
+
     
 
 $stmt = null;
