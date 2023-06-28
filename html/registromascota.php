@@ -13,7 +13,7 @@
     ?>
 
     <h2>Buscar Cliente</h2>
-    <form action="../php/crud_mascotas.php" method="get">
+    <form action="../php/crud_mascota.php" method="get">
         <input type="hidden" name="action" value="search">
         <label for="id_cliente">ID del dueño:</label><br>
         <input type="text" id="id_cliente" name="id_cliente"><br>
