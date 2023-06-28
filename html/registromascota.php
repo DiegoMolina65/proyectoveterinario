@@ -50,31 +50,46 @@
             <th>Historial Médico</th>
             <th>Acciones</th>
         </tr>
-        <?php foreach($mascotas as $mascota): ?>
-        <tr>
-            <td><?php echo $mascota["ID_Mascota"]; ?></td>
-            <td><?php echo $mascota["ID_Cliente"]; ?></td>
-            <td><?php echo $mascota["Nombre"]; ?></td>
-            <td><?php echo $mascota["Especie"]; ?></td>
-            <td><?php echo $mascota["Raza"]; ?></td>
-            <td><?php echo $mascota["Fecha_Nacimiento"]; ?></td>
-            <td><?php echo $mascota["Peso"]; ?></td>
-            <td><?php echo $mascota["Color"]; ?></td>
-            <td><?php echo $mascota["Historial_Medico"]; ?></td>
-            <td>
-                <form action="../php/crud_mascota.php" method="post">
-                    <input type="hidden" name="action" value="delete">
-                    <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
-                    <button type="submit">Eliminar</button>
-                </form>
-                <form action="../php/crud_mascota.php" method="post">
-                    <input type="hidden" name="action" value="update">
-                    <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
-                    <button type="submit">Actualizar</button>
-                </form>
-            </td>
-        </tr>
-        <?php endforeach; ?>
+        <?php
+        // Importar el archivo de configuración de la base de datos (db_config.php)
+        require_once '../php/db_config.php';
+
+        // Obtener las mascotas registradas de la base de datos
+        $sql = "SELECT * FROM Mascotas";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($mascota = $result->fetch_assoc()) {
+                ?>
+                <tr>
+                    <td><?php echo $mascota["ID_Mascota"]; ?></td>
+                    <td><?php echo $mascota["ID_Cliente"]; ?></td>
+                    <td><?php echo $mascota["Nombre"]; ?></td>
+                    <td><?php echo $mascota["Especie"]; ?></td>
+                    <td><?php echo $mascota["Raza"]; ?></td>
+                    <td><?php echo $mascota["Fecha_Nacimiento"]; ?></td>
+                    <td><?php echo $mascota["Peso"]; ?></td>
+                    <td><?php echo $mascota["Color"]; ?></td>
+                    <td><?php echo $mascota["Historial_Medico"]; ?></td>
+                    <td>
+                        <form action="../php/crud_mascota.php" method="post">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
+                            <button type="submit">Eliminar</button>
+                        </form>
+                        <form action="../php/crud_mascota.php" method="post">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="id_mascota" value="<?php echo $mascota["ID_Mascota"]; ?>">
+                            <button type="submit">Actualizar</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php
+            }
+        } else {
+            echo "No se encontraron mascotas registradas.";
+        }
+        ?>
     </table>
 </body>
 </html>
