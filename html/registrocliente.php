@@ -10,6 +10,26 @@
         session_start();
         $clientes = $_SESSION['clientes'] ?? [];
     ?>
+
+    
+    <h2>Registrar Cliente</h2>
+    <form action="../php/crud_clientes.php" method="post">
+        <input type="hidden" name="action" value="create">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre"><br>
+        <label for="apellido">Apellido:</label><br>
+        <input type="text" id="apellido" name="apellido"><br>
+        <label for="direccion">Dirección:</label><br>
+        <input type="text" id="direccion" name="direccion"><br>
+        <label for="ciudad">Ciudad:</label><br>
+        <input type="text" id="ciudad" name="ciudad"><br>
+        <label for="telefono">Teléfono:</label><br>
+        <input type="text" id="telefono" name="telefono"><br>
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="text" id="correo" name="correo"><br>
+        <input type="submit" value="Registrar">
+    </form>
+
     <h2>Lista de Clientes</h2>
     <table>
         <tr>
@@ -52,23 +72,5 @@
         </tr>
         <?php endforeach; ?>
     </table>
-    
-    <h2>Registrar Cliente</h2>
-    <form action="../php/crud_clientes.php" method="post">
-        <input type="hidden" name="action" value="create">
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre"><br>
-        <label for="apellido">Apellido:</label><br>
-        <input type="text" id="apellido" name="apellido"><br>
-        <label for="direccion">Dirección:</label><br>
-        <input type="text" id="direccion" name="direccion"><br>
-        <label for="ciudad">Ciudad:</label><br>
-        <input type="text" id="ciudad" name="ciudad"><br>
-        <label for="telefono">Teléfono:</label><br>
-        <input type="text" id="telefono" name="telefono"><br>
-        <label for="correo">Correo Electrónico:</label><br>
-        <input type="text" id="correo" name="correo"><br>
-        <input type="submit" value="Registrar">
-    </form>
 </body>
 </html>
