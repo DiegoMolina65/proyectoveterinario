@@ -1,132 +1,102 @@
 <?php
-require_once "db_config.php";
+// Importar el archivo de configuración de la base de datos (db_config.php)
+require_once 'db_config.php';
 
-$action = $_POST["action"];
+// Verificar si se envió el formulario de registro de mascotas
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action'];
 
-if ($action == "create") {
-    $id_cliente = $_POST["id_cliente"];
-    $nombre = $_POST["nombre"];
-    $especie = $_POST["especie"];
-    $raza = $_POST["raza"];
-    $fecha_nacimiento = $_POST["fecha_nacimiento"];
-    $peso = $_POST["peso"];
-    $color = $_POST["color"];
-    $historial_medico = $_POST["historial_medico"];
+    // Verificar si la acción es "create" (registro de mascota)
+    if ($action === 'create') {
+        // Recuperar los datos del formulario
+        $id_cliente = $_POST['id_cliente'];
+        $nombre = $_POST['nombre'];
+        $especie = $_POST['especie'];
+        $raza = $_POST['raza'];
+        $fecha_nacimiento = $_POST['fecha_nacimiento'];
+        $peso = $_POST['peso'];
+        $color = $_POST['color'];
+        $historial_medico = $_POST['historial_medico'];
 
-    $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssssss", $id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico);
-
-    if ($stmt->execute()) {
-        echo "La mascota se registró exitosamente.";
-    } else {
-        echo "Error al registrar la mascota: " . $stmt->error;
+        // Insertar los datos en la base de datos
+        $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico)
+                VALUES ('$id_cliente', '$nombre', '$especie', '$raza', '$fecha_nacimiento', '$peso', '$color', '$historial_medico')";
+        
+        if ($conn->query($sql) === TRUE) {
+            // Redireccionar a la página actual para actualizar la tabla de mascotas registradas
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            echo 'Error al insertar los datos: ' . $conn->error;
+        }
     }
-} elseif ($action == "get_owner") {
-    $id_cliente_dueno = $_POST["id_cliente_dueno"];
 
-    $sql = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_cliente_dueno);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $cliente = $result->fetch_assoc();
+    // Verificar si la acción es "update" (edición de mascota)
+    if ($action === 'update') {
+        $id_mascota = $_POST['id_mascota'];
+        // Recuperar los datos actualizados del formulario
+        $nombre = $_POST['nombre'];
+        $especie = $_POST['especie'];
+        $raza = $_POST['raza'];
+        $fecha_nacimiento = $_POST['fecha_nacimiento'];
+        $peso = $_POST['peso'];
+        $color = $_POST['color'];
+        $historial_medico = $_POST['historial_medico'];
 
-    if ($cliente) {
-        echo "<h3>Datos del Dueño</h3>";
-        echo "<p>Nombre: " . $cliente['Nombre'] . "</p>";
-        echo "<p>Apellido: " . $cliente['Apellido'] . "</p>";
-        echo "<p>Dirección: " . $cliente['Dirección'] . "</p>";
-        echo "<p>Ciudad: " . $cliente['Ciudad'] . "</p>";
-        echo "<p>Teléfono: " . $cliente['Teléfono'] . "</p>";
-        echo "<p>Correo Electrónico: " . $cliente['Correo_electrónico'] . "</p>";
-    } else {
-        echo "No se encontró un cliente con ese ID.";
+        // Actualizar los datos en la base de datos
+        $sql = "UPDATE Mascotas SET 
+                    Nombre = '$nombre',
+                    Especie = '$especie',
+                    Raza = '$raza',
+                    Fecha_Nacimiento = '$fecha_nacimiento',
+                    Peso = '$peso',
+                    Color = '$color',
+                    Historial_Medico = '$historial_medico'
+                WHERE ID_Mascota = $id_mascota";
+
+        if ($conn->query($sql) === TRUE) {
+            // Redireccionar a la página actual para actualizar la tabla de mascotas registradas
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            echo 'Error al actualizar los datos: ' . $conn->error;
+        }
     }
-} elseif ($action == "delete") {
-    $id_mascota = $_POST["id_mascota"];
 
-    $sql = "DELETE FROM Mascotas WHERE ID_Mascota = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_mascota);
+    // Verificar si la acción es "delete" (eliminación de mascota)
+    if ($action === 'delete') {
+        $id_mascota = $_POST['id_mascota'];
 
-    if ($stmt->execute()) {
-        echo "La mascota se eliminó exitosamente.";
-    } else {
-        echo "Error al eliminar la mascota: " . $stmt->error;
+        // Eliminar la mascota de la base de datos
+        $sql = "DELETE FROM Mascotas WHERE ID_Mascota = $id_mascota";
+
+        if ($conn->query($sql) === TRUE) {
+            // Redireccionar a la página actual para actualizar la tabla de mascotas registradas
+            header('Location: ' . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            echo 'Error al eliminar los datos: ' . $conn->error;
+        }
     }
-} elseif ($action == "update") {
-    $id_mascota = $_POST["id_mascota"];
-    $nombre = $_POST["nombre"];
-    $especie = $_POST["especie"];
-    $raza = $_POST["raza"];
-    $fecha_nacimiento = $_POST["fecha_nacimiento"];
-    $peso = $_POST["peso"];
-    $color = $_POST["color"];
-    $historial_medico = $_POST["historial_medico"];
 
-    $sql = "UPDATE Mascotas SET Nombre = ?, Especie = ?, Raza = ?, Fecha_Nacimiento = ?, Peso = ?, Color = ?, Historial_Medico = ? WHERE ID_Mascota = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssi", $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota);
+    // Verificar si la acción es "get_owner" (obtener datos del dueño)
+    if ($action === 'get_owner') {
+        $id_cliente_dueno = $_POST['id_cliente_dueno'];
 
-    if ($stmt->execute()) {
-        echo "La mascota se actualizó exitosamente.";
-    } else {
-        echo "Error al actualizar la mascota: " . $stmt->error;
+        // Buscar los datos del dueño en la base de datos
+        $sql = "SELECT * FROM Clientes WHERE ID_Cliente = $id_cliente_dueno";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            $owner = $result->fetch_assoc();
+            // Mostrar los datos del dueño
+            echo "ID del Cliente: " . $owner['ID_Cliente'] . "<br>";
+            echo "Nombre: " . $owner['Nombre'] . "<br>";
+            echo "Apellido: " . $owner['Apellido'] . "<br>";
+            // Agrega más campos según la estructura de tu tabla "Clientes"
+        } else {
+            echo "No se encontraron datos para el ID del cliente proporcionado.";
+        }
     }
 }
-
-// Obtener y mostrar las mascotas registradas en una tabla
-$sql = "SELECT * FROM Mascotas";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    echo "<h2>Tabla de Mascotas Registradas</h2>";
-    echo "<table>";
-    echo "<tr>";
-    echo "<th>ID Mascota</th>";
-    echo "<th>ID Cliente</th>";
-    echo "<th>Nombre</th>";
-    echo "<th>Especie</th>";
-    echo "<th>Raza</th>";
-    echo "<th>Fecha de Nacimiento</th>";
-    echo "<th>Peso</th>";
-    echo "<th>Color</th>";
-    echo "<th>Historial Médico</th>";
-    echo "<th>Acciones</th>";
-    echo "</tr>";
-
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>";
-        echo "<td>" . $row['ID_Mascota'] . "</td>";
-        echo "<td>" . $row['ID_Cliente'] . "</td>";
-        echo "<td>" . $row['Nombre'] . "</td>";
-        echo "<td>" . $row['Especie'] . "</td>";
-        echo "<td>" . $row['Raza'] . "</td>";
-        echo "<td>" . $row['Fecha_Nacimiento'] . "</td>";
-        echo "<td>" . $row['Peso'] . "</td>";
-        echo "<td>" . $row['Color'] . "</td>";
-        echo "<td>" . $row['Historial_Medico'] . "</td>";
-        echo "<td>";
-        echo "<form action='../php/crud_mascota.php' method='post'>";
-        echo "<input type='hidden' name='action' value='delete'>";
-        echo "<input type='hidden' name='id_mascota' value='" . $row['ID_Mascota'] . "'>";
-        echo "<button type='submit'>Eliminar</button>";
-        echo "</form>";
-        echo "<form action='../php/crud_mascota.php' method='post'>";
-        echo "<input type='hidden' name='action' value='update'>";
-        echo "<input type='hidden' name='id_mascota' value='" . $row['ID_Mascota'] . "'>";
-        echo "<button type='submit'>Actualizar</button>";
-        echo "</form>";
-        echo "</td>";
-        echo "</tr>";
-    }
-
-    echo "</table>";
-} else {
-    echo "No se encontraron mascotas registradas.";
-}
-
-$stmt->close();
-$conn->close();
 ?>
