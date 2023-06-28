@@ -1,11 +1,4 @@
 <?php
-
-if ($conn->query($sql) === TRUE) {
-    // La consulta se ejecutó correctamente
-} else {
-    echo 'Error al ejecutar la consulta: ' . $conn->error;
-}
-
 // Importar el archivo de configuración de la base de datos (db_config.php)
 require_once 'db_config.php';
 
