@@ -10,20 +10,15 @@
     <?php
         session_start();
         $mascotas = $_SESSION['mascotas'] ?? [];
-        $clientes = $_SESSION['clientes'] ?? [];
     ?>
 
-<form action="../php/crud_mascota.php" method="post">
-        <input type="hidden" name="action" value="create">
-        <label for="id_cliente">Dueño:</label><br>
-        <select id="id_cliente" name="id_cliente">
-            <?php foreach ($clientes as $cliente): ?>
-            <option value="<?php echo $cliente['ID_Cliente']; ?>">
-                <?php echo $cliente['Nombre'] . ' ' . $cliente['Apellido']; ?>
-            </option>
-            <?php endforeach; ?>
-        </select><br>
-    </form>
+    <h2>Buscar Dueño de Mascota</h2>
+        <form action="../php/crud_mascotas.php" method="get">
+            <input type="hidden" name="action" value="search">
+            <label for="id_cliente">ID Cliente:</label><br>
+            <input type="text" id="id_cliente" name="id_cliente">
+            <input type="submit" value="Buscar">
+        </form>
 
     <form action="../php/crud_mascota.php" method="post">
         <input type="hidden" name="action" value="create">

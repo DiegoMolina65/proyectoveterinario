@@ -21,8 +21,8 @@ $color = $_POST["color"] ?? '';
 $historial_medico = $_POST["historial_medico"] ?? '';
 
 if ($action == "create") {
-    checkEmptyFields(["id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color"]);
-
+    checkEmptyFields(["id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color", "historial_medico"]);
+    
     $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico]);
@@ -33,8 +33,8 @@ if ($action == "create") {
     }
 } else if ($action == "update") {
     $id_mascota = $_POST["id_mascota"];
-    checkEmptyFields(["id_mascota", "id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color"]);
-
+    checkEmptyFields(["id_cliente", "nombre", "especie", "raza", "fecha_nacimiento", "peso", "color", "historial_medico", "id_mascota"]);
+    
     $sql = "UPDATE Mascotas SET ID_Cliente=?, Nombre=?, Especie=?, Raza=?, Fecha_Nacimiento=?, Peso=?, Color=?, Historial_Medico=? WHERE ID_Mascota=?";
     $stmt = $conn->prepare($sql);
     $stmt->execute([$id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota]);
@@ -57,22 +57,39 @@ if ($action == "create") {
     }
 }
 
+if ($action == "search") {
+    $id_cliente = $_GET["id_cliente"];
+    
+    $sql = "SELECT * FROM Mascotas WHERE ID_Cliente = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$id_cliente]);
+    $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Guardar las mascotas en una variable de sesión para su uso en la página de registro de mascotas.
+    session_start();
+    $_SESSION['mascotas'] = $mascotas;
+    header('Location: ../html/registromascota.php');
+    exit();
+}
+
+
 $stmt = null;
 $conn = null;
 
-// Crear una lista de mascotas con información de dueño.
+// Crear una lista de mascotas.
 try {
     $conn = new PDO("mysql:host=$host;dbname=$db_name", $db_username, $db_password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    $sql = "SELECT Mascotas.*, Clientes.Nombre AS nombre_dueno, Clientes.Apellido AS apellido_dueno FROM Mascotas INNER JOIN Clientes ON Mascotas.ID_Cliente = Clientes.ID_Cliente";
+    $sql = "SELECT * FROM Mascotas";
     $stmt = $conn->query($sql);
     $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Guardar la lista de mascotas en una variable de sesión para su uso en registromascota.php.
+    // Guardar la lista de mascotas en una variable de sesión para su uso en registrocliente.php.
     session_start();
     $_SESSION['mascotas'] = $mascotas;
 } catch(PDOException $e) {
     echo "Error al recuperar la lista de mascotas: " . $e->getMessage();
 }
+
 ?>
