@@ -18,22 +18,20 @@ if ($action == "create") {
 
     $sql = "INSERT INTO Mascotas (ID_Cliente, Nombre, Especie, Raza, Fecha_Nacimiento, Peso, Color, Historial_Medico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isssssss", $id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico);
-    if($stmt->execute()){
+    $stmt->execute([$id_cliente, $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico]);
+    if($stmt->rowCount() > 0){
         header("Location: ../html/registromascota.php");
         exit();
     } else {
-        echo "Error al registrar mascota: " . $stmt->error;
+        echo "Error al registrar mascota: " . $stmt->errorInfo()[2];
     }
 } elseif ($action == "get_owner") {
     $id_cliente_dueno = $_POST["id_cliente_dueno"];
 
     $sql = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_cliente_dueno);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $cliente = $result->fetch_assoc();
+    $stmt->execute([$id_cliente_dueno]);
+    $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if ($cliente) {
         echo "<h3>Datos del Dueño</h3>";
@@ -58,28 +56,28 @@ if ($action == "create") {
 
     $sql = "UPDATE Mascotas SET Nombre=?, Especie=?, Raza=?, Fecha_Nacimiento=?, Peso=?, Color=?, Historial_Medico=? WHERE ID_Mascota=?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssi", $nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota);
-    if($stmt->execute()){
+    $stmt->execute([$nombre, $especie, $raza, $fecha_nacimiento, $peso, $color, $historial_medico, $id_mascota]);
+    if($stmt->rowCount() > 0){
         header("Location: ../html/registromascota.php");
         exit();
     } else {
-        echo "Error al actualizar mascota: " . $stmt->error;
+        echo "Error al actualizar mascota: " . $stmt->errorInfo()[2];
     }
 } elseif ($action == "delete") {
     $id_mascota = $_POST["id_mascota"];
 
     $sql = "DELETE FROM Mascotas WHERE ID_Mascota = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id_mascota);
-    if($stmt->execute()){
+    $stmt->execute([$id_mascota]);
+    if($stmt->rowCount() > 0){
         header("Location: ../html/registromascota.php");
         exit();
     } else {
-        echo "Error al eliminar mascota: " . $stmt->error;
+        echo "Error al eliminar mascota: " . $stmt->errorInfo()[2];
     }
 } else {
     echo "Acción no válida.";
 }
 
-$conn->close();
+$conn = null;
 ?>
