@@ -65,24 +65,24 @@ if ($action == "create") {
 
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>".$row['ID_Mascota']."</td>";
-            echo "<td>".$row['ID_Cliente']."</td>";
-            echo "<td>".$row['Nombre']."</td>";
-            echo "<td>".$row['Especie']."</td>";
-            echo "<td>".$row['Raza']."</td>";
-            echo "<td>".$row['Fecha_Nacimiento']."</td>";
-            echo "<td>".$row['Peso']."</td>";
-            echo "<td>".$row['Color']."</td>";
-            echo "<td>".$row['Historial_Medico']."</td>";
+            echo "<td>" . $row['ID_Mascota'] . "</td>";
+            echo "<td>" . $row['ID_Cliente'] . "</td>";
+            echo "<td>" . $row['Nombre'] . "</td>";
+            echo "<td>" . $row['Especie'] . "</td>";
+            echo "<td>" . $row['Raza'] . "</td>";
+            echo "<td>" . $row['Fecha_Nacimiento'] . "</td>";
+            echo "<td>" . $row['Peso'] . "</td>";
+            echo "<td>" . $row['Color'] . "</td>";
+            echo "<td>" . $row['Historial_Medico'] . "</td>";
             echo "<td>";
             echo "<form action='../php/crud_mascota.php' method='post'>";
             echo "<input type='hidden' name='action' value='delete'>";
-            echo "<input type='hidden' name='id_mascota' value='".$row['ID_Mascota']."'>";
+            echo "<input type='hidden' name='id_mascota' value='" . $row['ID_Mascota'] . "'>";
             echo "<button type='submit'>Eliminar</button>";
             echo "</form>";
             echo "<form action='../php/crud_mascota.php' method='post'>";
             echo "<input type='hidden' name='action' value='update'>";
-            echo "<input type='hidden' name='id_mascota' value='".$row['ID_Mascota']."'>";
+            echo "<input type='hidden' name='id_mascota' value='" . $row['ID_Mascota'] . "'>";
             echo "<button type='submit'>Actualizar</button>";
             echo "</form>";
             echo "</td>";
