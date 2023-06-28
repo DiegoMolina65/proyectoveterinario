@@ -59,20 +59,25 @@ if ($action == "create") {
     $id_cliente_dueno = $_POST['id_cliente_dueno'];
 
     // Buscar los datos del dueño en la base de datos
-    $sql = "SELECT * FROM Clientes WHERE ID_Cliente = $id_cliente_dueno";
-    $result = $conn->query($sql);
+    $sql = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$id_cliente_dueno]);
 
-    if ($result->num_rows > 0) {
-        $owner = $result->fetch_assoc();
+    if ($stmt->rowCount() > 0) {
+        $owner = $stmt->fetch();
         // Mostrar los datos del dueño
         echo "ID del Cliente: " . $owner['ID_Cliente'] . "<br>";
         echo "Nombre: " . $owner['Nombre'] . "<br>";
         echo "Apellido: " . $owner['Apellido'] . "<br>";
-        // Agrega más campos según la estructura de tu tabla "Clientes"
+        echo "Dirección: " . $owner['Dirección'] . "<br>";
+        echo "Ciudad: " . $owner['Ciudad'] . "<br>";
+        echo "Teléfono: " . $owner['Teléfono'] . "<br>";
+        echo "Correo_electrónico: " . $owner['Correo_electrónico'] . "<br>";
     } else {
         echo "No se encontraron datos para el ID del cliente proporcionado.";
     }
 }
+
 
 $stmt = null;
 $conn = null;
