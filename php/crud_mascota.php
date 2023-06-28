@@ -55,36 +55,24 @@ if ($action == "create") {
     } else {
         echo "Error al eliminar mascota: " . $stmt->errorInfo()[2];
     }
-}   else if ($action == "search") {
-    $id_cliente = $_GET["id_cliente"];
-    
-    // Recupera la información del cliente
-    $sql_cliente = "SELECT * FROM Clientes WHERE ID_Cliente = ?";
-    $stmt_cliente = $conn->prepare($sql_cliente);
-    $stmt_cliente->execute([$id_cliente]);
-    $cliente = $stmt_cliente->fetch(PDO::FETCH_ASSOC);
-    
-    if ($cliente) {
-        // Recupera las mascotas de este cliente
-        $sql_mascotas = "SELECT * FROM Mascotas WHERE ID_Cliente = ?";
-        $stmt_mascotas = $conn->prepare($sql_mascotas);
-        $stmt_mascotas->execute([$id_cliente]);
-        $mascotas = $stmt_mascotas->fetchAll(PDO::FETCH_ASSOC);
-    
-        // Guarda el cliente y sus mascotas en variables de sesión para su uso en la página de registro de mascotas
-        session_start();
-        $_SESSION['cliente'] = $cliente;
-        $_SESSION['mascotas'] = $mascotas;
+}   else if ($action === 'get_owner') {
+    $id_cliente_dueno = $_POST['id_cliente_dueno'];
+
+    // Buscar los datos del dueño en la base de datos
+    $sql = "SELECT * FROM Clientes WHERE ID_Cliente = $id_cliente_dueno";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $owner = $result->fetch_assoc();
+        // Mostrar los datos del dueño
+        echo "ID del Cliente: " . $owner['ID_Cliente'] . "<br>";
+        echo "Nombre: " . $owner['Nombre'] . "<br>";
+        echo "Apellido: " . $owner['Apellido'] . "<br>";
+        // Agrega más campos según la estructura de tu tabla "Clientes"
     } else {
-        echo "No se encontró un cliente con el ID proporcionado.";
+        echo "No se encontraron datos para el ID del cliente proporcionado.";
     }
-    
-    header('Location: ../html/registromascota.php');
-    exit();
 }
-
-
-    
 
 $stmt = null;
 $conn = null;
